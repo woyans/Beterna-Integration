@@ -1,0 +1,2517 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TSTimesheetServices" targetNamespace="http://tempuri.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_TSTimesheetSubmissionService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="BasicHttpBinding_TSTimesheetApprovalService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="anyType" nillable="true" type="xs:anyType" />
+      <xs:element name="anyURI" nillable="true" type="xs:anyURI" />
+      <xs:element name="base64Binary" nillable="true" type="xs:base64Binary" />
+      <xs:element name="boolean" nillable="true" type="xs:boolean" />
+      <xs:element name="byte" nillable="true" type="xs:byte" />
+      <xs:element name="dateTime" nillable="true" type="xs:dateTime" />
+      <xs:element name="decimal" nillable="true" type="xs:decimal" />
+      <xs:element name="double" nillable="true" type="xs:double" />
+      <xs:element name="float" nillable="true" type="xs:float" />
+      <xs:element name="int" nillable="true" type="xs:int" />
+      <xs:element name="long" nillable="true" type="xs:long" />
+      <xs:element name="QName" nillable="true" type="xs:QName" />
+      <xs:element name="short" nillable="true" type="xs:short" />
+      <xs:element name="string" nillable="true" type="xs:string" />
+      <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte" />
+      <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt" />
+      <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong" />
+      <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort" />
+      <xs:element name="char" nillable="true" type="tns:char" />
+      <xs:simpleType name="char">
+        <xs:restriction base="xs:int" />
+      </xs:simpleType>
+      <xs:element name="duration" nillable="true" type="tns:duration" />
+      <xs:simpleType name="duration">
+        <xs:restriction base="xs:duration">
+          <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?" />
+          <xs:minInclusive value="-P10675199DT2H48M5.4775808S" />
+          <xs:maxInclusive value="P10675199DT2H48M5.4775807S" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="guid" nillable="true" type="tns:guid" />
+      <xs:simpleType name="guid">
+        <xs:restriction base="xs:string">
+          <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:attribute name="FactoryType" type="xs:QName" />
+      <xs:attribute name="Id" type="xs:ID" />
+      <xs:attribute name="Ref" type="xs:IDREF" />
+    </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="ArrayOfanyType">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="anyType" nillable="true" type="xs:anyType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfanyType" nillable="true" type="tns:ArrayOfanyType" />
+      <xs:complexType name="ArrayOfstring">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
+      <xs:complexType name="ArrayOfKeyValueOfstringstring">
+        <xs:annotation>
+          <xs:appinfo>
+            <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+          </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfstringstring">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Key" nillable="true" type="xs:string" />
+                <xs:element name="Value" nillable="true" type="xs:string" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfKeyValueOfstringstring" nillable="true" type="tns:ArrayOfKeyValueOfstringstring" />
+      <xs:complexType name="ArrayOflong">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="long" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOflong" nillable="true" type="tns:ArrayOflong" />
+    </xs:schema>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" />
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xs:element name="getTimesheetSettingsForCurrentUser">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetSettingsForCurrentUserResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q1:TSTimesheetSettingsList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createNewTimesheet">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetDate" type="xs:dateTime" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createNewTimesheetResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q2:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="findOrCreateTimesheet">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetDate" type="xs:dateTime" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="findOrCreateTimesheetResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q3:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createOrUpdateTimesheetLine">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="_tsTimesheetEntryList" nillable="true" type="q4:TSTimesheetEntryList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="createOrUpdateTimesheetLineResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q5:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deleteTimesheetLine">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetLineRecId" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deleteTimesheetLineResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="result" type="xs:boolean" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deleteTimesheets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetNbrs" nillable="true" type="q6:ArrayOfstring" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="deleteTimesheetsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="result" type="xs:boolean" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetDetailsByNumber">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetNumber" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetDetailsByNumberResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q7:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetSummary">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetSummaryResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q8:TSTimesheetSummary" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getCompletedTimesheets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_numOfTimesheets" type="xs:int" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getCompletedTimesheetsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q9:TSTimesheetCompletedTimesheetsList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLegalEntityReferenceInformation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLegalEntityReferenceInformationResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q10:TSTimesheetProjectDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getRecentAndAssignedProjects">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_legalEntity" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timeEntryDate" type="xs:dateTime" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getRecentAndAssignedProjectsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q11:TSTimesheetProjectList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getProjectDetailsSearch">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_legalEntity" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_searchString" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getProjectDetailsSearchResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q12:TSTimesheetProjectList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="submitTimesheet">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_recId" type="xs:long" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="submitTimesheetResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q13:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="recallTimesheet">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_recId" type="xs:long" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="recallTimesheetResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q14:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLabelTranslations">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_labelsToTranslate" nillable="true" type="q15:ArrayOfstring" />
+            <xs:element minOccurs="0" name="_language" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getLabelTranslationsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q16:TSServiceLabels" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="saveTimesheetLinesAsFavorite">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="_tsTimesheetEntryList" nillable="true" type="q17:TSTimesheetEntryList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="saveTimesheetLinesAsFavoriteResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="result" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="copyLinesFromFavorites">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_entryDate" type="xs:dateTime" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetTo" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="copyLinesFromFavoritesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q18:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="copyLinesFromAssignments">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_entryDate" type="xs:dateTime" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetTo" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="copyLinesFromAssignmentsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q19:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="copyLinesFromTimesheet">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+            <xs:element minOccurs="0" name="_timesheetFrom" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_timesheetTo" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="copyLinesFromTimesheetResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q20:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getProjectDetailsByProjId">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_legalEntity" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_projId" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="_resource" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getProjectDetailsByProjIdResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q21:TSTimesheetProject" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getServerVersion">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getServerVersionResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="result" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetsForMyApproval">
+        <xs:complexType>
+          <xs:sequence />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetsForMyApprovalResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q22:TSTimesheetDetailsList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetDetailsForMyApproval">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_recId" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getTimesheetDetailsForMyApprovalResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q23:TsTimesheetDetails" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="approveTimesheets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element xmlns:q24="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetRecIds" nillable="true" type="q24:ArrayOflong" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="approveTimesheetsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q25:TSTimesheetWorkflowResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="approveTimesheetLines">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element xmlns:q26="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetLineRecIds" nillable="true" type="q26:ArrayOflong" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="approveTimesheetLinesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q27:TSTimesheetWorkflowResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="rejectTimesheets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element xmlns:q28="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetRecIds" nillable="true" type="q28:ArrayOflong" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="rejectTimesheetsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q29:TSTimesheetWorkflowResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="rejectTimesheetLines">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element xmlns:q30="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetLineRecIds" nillable="true" type="q30:ArrayOflong" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="rejectTimesheetLinesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q31:TSTimesheetWorkflowResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="delegateTimesheets">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element xmlns:q32="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetRecIds" nillable="true" type="q32:ArrayOflong" />
+            <xs:element minOccurs="0" name="_user" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="delegateTimesheetsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q33:TSTimesheetWorkflowResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="delegateTimesheetLines">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_comment" nillable="true" type="xs:string" />
+            <xs:element xmlns:q34="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="_timesheetLineRecIds" nillable="true" type="q34:ArrayOflong" />
+            <xs:element minOccurs="0" name="_user" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="delegateTimesheetLinesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q35:TSTimesheetWorkflowResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDelegatesForApproval">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_timesheetRecId" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDelegatesForApprovalResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q36:TSTimesheetUserList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDelegatesForLineApproval">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="_timesheetLineRecId" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDelegatesForLineApprovalResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" minOccurs="0" name="result" nillable="true" type="q37:TSTimesheetUserList" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+    <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xs:complexType name="CallContext">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Company" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Language" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MessageId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PartitionKey" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="CallContext" nillable="true" type="tns:CallContext" />
+      <xs:complexType name="Infolog">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Entries" nillable="true" type="tns:ArrayOfInfologEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Infolog" nillable="true" type="tns:Infolog" />
+      <xs:complexType name="ArrayOfInfologEntry">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="InfologEntry" nillable="true" type="tns:InfologEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfInfologEntry" nillable="true" type="tns:ArrayOfInfologEntry" />
+      <xs:complexType name="InfologEntry">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Type" type="tns:InfologType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="InfologEntry" nillable="true" type="tns:InfologEntry" />
+      <xs:simpleType name="InfologType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Info" />
+          <xs:enumeration value="Warning" />
+          <xs:enumeration value="Error" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="InfologType" nillable="true" type="tns:InfologType" />
+      <xs:complexType name="Fault">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ExceptionMessage" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ExceptionType" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="Fault" nillable="true" type="tns:Fault" />
+    </xs:schema>
+    <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Dynamics.AX.Application" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" />
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xs:complexType name="TSTimesheetSettingsList">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q1:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmTimesheetSettingsList" nillable="true" type="tns:ArrayOfTsTimesheetSettings" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetSettingsList" nillable="true" type="tns:TSTimesheetSettingsList" />
+      <xs:complexType name="ArrayOfTsTimesheetSettings">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TsTimesheetSettings" nillable="true" type="tns:TsTimesheetSettings" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTsTimesheetSettings" nillable="true" type="tns:ArrayOfTsTimesheetSettings" />
+      <xs:complexType name="TsTimesheetSettings">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q2="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q2:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="customFields" nillable="true" type="tns:ArrayOfTSTimesheetCustomField" />
+              <xs:element minOccurs="0" name="dayWeekStarts" type="tns:WeekDays" />
+              <xs:element minOccurs="0" name="defaultLegalEntity" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="enableIntercompanyTimesheet" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="hideActivity" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="hideCategory" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="hideExtComments" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="hideIntComments" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="hideLineProperty" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="isCurrentUserAnApprover" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="legalEntity" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="legalEntityName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="periodId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="periodList" nillable="true" type="tns:ArrayOfTSTimesheetPeriods" />
+              <xs:element minOccurs="0" name="preferredLocale" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="requireStartStopTime" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="resources" nillable="true" type="tns:ArrayOfTSTimesheetResource" />
+              <xs:element minOccurs="0" name="useFavorites" type="q2:NoYes" />
+              <xs:element minOccurs="0" name="userLanguage" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="visibilityActivity" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilityCategory" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilityCustomer" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilityExternalComment" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilityInternalComment" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilityItemSalesTaxGroup" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilityLineProperty" type="tns:TSFieldVisibility" />
+              <xs:element minOccurs="0" name="visibilitySalesTaxGroup" type="tns:TSFieldVisibility" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TsTimesheetSettings" nillable="true" type="tns:TsTimesheetSettings" />
+      <xs:complexType name="ArrayOfTSTimesheetCustomField">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetCustomField" nillable="true" type="tns:TSTimesheetCustomField" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetCustomField" nillable="true" type="tns:ArrayOfTSTimesheetCustomField" />
+      <xs:complexType name="TSTimesheetCustomField">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q3:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="booleanValue" type="xs:boolean" />
+              <xs:element minOccurs="0" name="dateValue" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="fieldBaseType" type="q3:Types" />
+              <xs:element minOccurs="0" name="fieldExtendedType" type="tns:TSCustomFieldExtendedType" />
+              <xs:element minOccurs="0" name="fieldName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="fieldSection" type="tns:TSCustomFieldSection" />
+              <xs:element minOccurs="0" name="guidValue" type="ser:guid" />
+              <xs:element minOccurs="0" name="int64Value" type="xs:long" />
+              <xs:element minOccurs="0" name="intValue" type="xs:int" />
+              <xs:element minOccurs="0" name="isEditable" type="q3:NoYes" />
+              <xs:element minOccurs="0" name="isMandatory" type="q3:NoYes" />
+              <xs:element minOccurs="0" name="label" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="numberOfDecimals" type="xs:int" />
+              <xs:element minOccurs="0" name="orderSequence" type="xs:int" />
+              <xs:element minOccurs="0" name="realValue" type="xs:decimal" />
+              <xs:element minOccurs="0" name="stringLength" type="xs:int" />
+              <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="stringOptions" nillable="true" type="q4:ArrayOfstring" />
+              <xs:element minOccurs="0" name="stringValue" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="tableName" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetCustomField" nillable="true" type="tns:TSTimesheetCustomField" />
+      <xs:simpleType name="TSCustomFieldExtendedType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="None" />
+          <xs:enumeration value="Currency" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="TSCustomFieldExtendedType" nillable="true" type="tns:TSCustomFieldExtendedType" />
+      <xs:simpleType name="TSCustomFieldSection">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Header" />
+          <xs:enumeration value="Line" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="TSCustomFieldSection" nillable="true" type="tns:TSCustomFieldSection" />
+      <xs:simpleType name="WeekDays">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="None" />
+          <xs:enumeration value="Monday" />
+          <xs:enumeration value="Tuesday" />
+          <xs:enumeration value="Wednesday" />
+          <xs:enumeration value="Thursday" />
+          <xs:enumeration value="Friday" />
+          <xs:enumeration value="Saturday" />
+          <xs:enumeration value="Sunday" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="WeekDays" nillable="true" type="tns:WeekDays" />
+      <xs:complexType name="ArrayOfTSTimesheetPeriods">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetPeriods" nillable="true" type="tns:TSTimesheetPeriods" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetPeriods" nillable="true" type="tns:ArrayOfTSTimesheetPeriods" />
+      <xs:complexType name="TSTimesheetPeriods">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q5:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="BillableHours" type="xs:decimal" />
+              <xs:element minOccurs="0" name="NonBillableHours" type="xs:decimal" />
+              <xs:element minOccurs="0" name="NormBillable" type="xs:decimal" />
+              <xs:element minOccurs="0" name="TotalHours" type="xs:decimal" />
+              <xs:element minOccurs="0" name="UserId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="periodFrom" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="periodTo" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetPeriods" nillable="true" type="tns:TSTimesheetPeriods" />
+      <xs:complexType name="ArrayOfTSTimesheetResource">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetResource" nillable="true" type="tns:TSTimesheetResource" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetResource" nillable="true" type="tns:ArrayOfTSTimesheetResource" />
+      <xs:complexType name="TSTimesheetResource">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q6="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q6:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="defaultHourCategory" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="defaultHourCategoryName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="isCurrentUser" type="xs:boolean" />
+              <xs:element minOccurs="0" name="legalEntity" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="periodId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="periodList" nillable="true" type="tns:ArrayOfTSTimesheetPeriods" />
+              <xs:element minOccurs="0" name="personnelNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="requireStartStopTime" type="q6:NoYes" />
+              <xs:element minOccurs="0" name="resourceRecId" type="xs:long" />
+              <xs:element minOccurs="0" name="workerName" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetResource" nillable="true" type="tns:TSTimesheetResource" />
+      <xs:simpleType name="TSFieldVisibility">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Display" />
+          <xs:enumeration value="ReadOnly" />
+          <xs:enumeration value="DoNotDisplay" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="TSFieldVisibility" nillable="true" type="tns:TSFieldVisibility" />
+      <xs:complexType name="TsTimesheetDetails">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q7="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q7:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="customFields" nillable="true" type="tns:ArrayOfTSTimesheetCustomField" />
+              <xs:element minOccurs="0" name="isAssignedToCurrentUserForApproval" type="xs:boolean" />
+              <xs:element minOccurs="0" name="lastApprovalActionInfo" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="lastWorkflowHeaderComment" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="messages" nillable="true" type="tns:ArrayOfTSMessage" />
+              <xs:element minOccurs="0" name="parmHeaderRecId" type="xs:long" />
+              <xs:element minOccurs="0" name="parmHrsPerWeek" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmNormBillable" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmPeriodFrom" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmPeriodTo" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmStatus" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmStatusEnum" type="tns:TSAppStatus" />
+              <xs:element minOccurs="0" name="parmTimesheetLE" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmTimesheetModifiedTime" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmTimesheetNbr" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmTotalChargeableHours" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmTotalNonChargeableHours" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmWorkerName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmWorkerPosition" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="submitterName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="tsLineDetailList" nillable="true" type="tns:ArrayOfTsTimesheetEntry" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TsTimesheetDetails" nillable="true" type="tns:TsTimesheetDetails" />
+      <xs:complexType name="ArrayOfTSMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSMessage" nillable="true" type="tns:TSMessage" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSMessage" nillable="true" type="tns:ArrayOfTSMessage" />
+      <xs:complexType name="TSMessage">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q8="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q8:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmMessage" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="__k_parmMessageSeverity" type="tns:Exception" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSMessage" nillable="true" type="tns:TSMessage" />
+      <xs:simpleType name="Exception">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Break">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="CLRError">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">9</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="CodeAccessSecurity">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="DDEerror">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Deadlock">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="DuplicateKeyException">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">13</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="DuplicateKeyExceptionNotRecovered">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">14</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Error">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="FunctionArgument">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">83</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Info">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">0</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Internal">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MethodNotFound">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">61</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="NoValidRunnableCode">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">17</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Numeric">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="PassClrObjectAcrossTiers">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">16</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Sequence">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Timeout">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">15</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="TypeCast">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">79</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="UpdateConflict">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">11</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="UpdateConflictNotRecovered">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">12</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="ViewDataSourceValidation">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">18</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="Warning">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SystemMaintenance">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">21</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="CompanyAccessViolation">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">22</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="TransientSqlConnectionError">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">23</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="PersistentSqlConnectionError">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">24</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="MaximumRetryCountExceeded">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">25</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="ItemNotOpened">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">91</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="ItemDoesNotExist">
+            <xs:annotation>
+              <xs:appinfo>
+                <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">92</EnumerationValue>
+              </xs:appinfo>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="Exception" nillable="true" type="tns:Exception" />
+      <xs:simpleType name="TSAppStatus">
+        <xs:restriction base="xs:string" />
+      </xs:simpleType>
+      <xs:element name="TSAppStatus" nillable="true" type="tns:TSAppStatus" />
+      <xs:complexType name="ArrayOfTsTimesheetEntry">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TsTimesheetEntry" nillable="true" type="tns:TsTimesheetEntry" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTsTimesheetEntry" nillable="true" type="tns:ArrayOfTsTimesheetEntry" />
+      <xs:complexType name="TsTimesheetEntry">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q9="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q9:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="customFields" nillable="true" type="tns:ArrayOfTSTimesheetCustomField" />
+              <xs:element minOccurs="0" name="isAssignedToCurrentUserForApproval" type="xs:boolean" />
+              <xs:element minOccurs="0" name="parmActivityName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmApprovalStatusEnum" type="tns:TSAppStatus" />
+              <xs:element minOccurs="0" name="parmCategoryName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmCostPrice" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmCurrencyCode" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmDefaultDimension" type="xs:long" />
+              <xs:element minOccurs="0" name="parmEditLines" type="xs:boolean" />
+              <xs:element minOccurs="0" name="parmEntryDate" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmExtComment" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmHrsPerDay" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmIntComment" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmLegalEntity" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmLinePropertyId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmPeriodFrom" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmPeriodTo" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmProjActivityNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjCategoryId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjectDataAreaId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmResource" type="xs:long" />
+              <xs:element minOccurs="0" name="parmSalesPrice" type="xs:decimal" />
+              <xs:element minOccurs="0" name="parmTimesheetLineModifiedTime" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmTimesheetLineRecId" type="xs:long" />
+              <xs:element minOccurs="0" name="parmTimesheetLineRecVersion" type="xs:int" />
+              <xs:element minOccurs="0" name="parmTimesheetNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmTimesheetTransRecId" type="xs:long" />
+              <xs:element minOccurs="0" name="parmTimesheetTransRecVersion" type="xs:int" />
+              <xs:element minOccurs="0" name="parmToBeInvoiced" type="q9:NoYes" />
+              <xs:element minOccurs="0" name="projectCustAccount" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="projectCustName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="taxGroup" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="taxItemGroup" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="timeFrom" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="timeTo" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TsTimesheetEntry" nillable="true" type="tns:TsTimesheetEntry" />
+      <xs:complexType name="TSTimesheetEntryList">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q10="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q10:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmEntryList" nillable="true" type="tns:ArrayOfTsTimesheetEntry" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetEntryList" nillable="true" type="tns:TSTimesheetEntryList" />
+      <xs:complexType name="TSTimesheetSummary">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q11="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q11:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="inProgressTimesheets" nillable="true" type="tns:ArrayOfTsTimesheetDetails" />
+              <xs:element minOccurs="0" name="numOfTimesheetsForApproval" type="xs:int" />
+              <xs:element minOccurs="0" name="recentTimesheet" nillable="true" type="tns:ArrayOfTsTimesheetDetails" />
+              <xs:element minOccurs="0" name="returnedTimesheets" nillable="true" type="tns:ArrayOfTsTimesheetDetails" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetSummary" nillable="true" type="tns:TSTimesheetSummary" />
+      <xs:complexType name="ArrayOfTsTimesheetDetails">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TsTimesheetDetails" nillable="true" type="tns:TsTimesheetDetails" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTsTimesheetDetails" nillable="true" type="tns:ArrayOfTsTimesheetDetails" />
+      <xs:complexType name="TSTimesheetCompletedTimesheetsList">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q12="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q12:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmCompletedTimesheetsList" nillable="true" type="tns:ArrayOfTsTimesheetDetails" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetCompletedTimesheetsList" nillable="true" type="tns:TSTimesheetCompletedTimesheetsList" />
+      <xs:complexType name="TSTimesheetProjectDetails">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q13="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q13:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="projectDetailList" nillable="true" type="tns:ArrayOfTSTimesheetLegalEntity" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetProjectDetails" nillable="true" type="tns:TSTimesheetProjectDetails" />
+      <xs:complexType name="ArrayOfTSTimesheetLegalEntity">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetLegalEntity" nillable="true" type="tns:TSTimesheetLegalEntity" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetLegalEntity" nillable="true" type="tns:ArrayOfTSTimesheetLegalEntity" />
+      <xs:complexType name="TSTimesheetLegalEntity">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q14="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q14:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="categoryList" nillable="true" type="tns:ArrayOfTSTimesheetCategory" />
+              <xs:element minOccurs="0" name="defaultHourCategory" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="defaultHourCategoryName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmLegalEntity" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmMinTimeIncrement" type="xs:decimal" />
+              <xs:element minOccurs="0" name="projLineProperty" nillable="true" type="tns:ArrayOfTSTimesheetLineProperty" />
+              <xs:element minOccurs="0" name="projectList" nillable="true" type="tns:ArrayOfTSTimesheetProject" />
+              <xs:element minOccurs="0" name="salesItemTaxGroupList" nillable="true" type="tns:ArrayOfTSTimesheetSalesItemTaxGroup" />
+              <xs:element minOccurs="0" name="salesTaxGroupList" nillable="true" type="tns:ArrayOfTSTimesheetSalesTaxGroup" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetLegalEntity" nillable="true" type="tns:TSTimesheetLegalEntity" />
+      <xs:complexType name="ArrayOfTSTimesheetCategory">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetCategory" nillable="true" type="tns:TSTimesheetCategory" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetCategory" nillable="true" type="tns:ArrayOfTSTimesheetCategory" />
+      <xs:complexType name="TSTimesheetCategory">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q15="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q15:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="defaultLineProperty" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="defaultSalesItemTaxGroup" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjCategoryId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjCategoryName" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetCategory" nillable="true" type="tns:TSTimesheetCategory" />
+      <xs:complexType name="ArrayOfTSTimesheetLineProperty">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetLineProperty" nillable="true" type="tns:TSTimesheetLineProperty" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetLineProperty" nillable="true" type="tns:ArrayOfTSTimesheetLineProperty" />
+      <xs:complexType name="TSTimesheetLineProperty">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q16="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q16:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="parmProjLineProperty" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjLinePropertyName" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetLineProperty" nillable="true" type="tns:TSTimesheetLineProperty" />
+      <xs:complexType name="ArrayOfTSTimesheetProject">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetProject" nillable="true" type="tns:TSTimesheetProject" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetProject" nillable="true" type="tns:ArrayOfTSTimesheetProject" />
+      <xs:complexType name="TSTimesheetProject">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q17="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q17:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="activityList" nillable="true" type="tns:ArrayOfTSTimesheetActivity" />
+              <xs:element minOccurs="0" name="categoryList" nillable="true" type="tns:ArrayOfTSTimesheetCategory" />
+              <xs:element minOccurs="0" name="defaultSalesTaxGroup" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="isAssignedToResource" type="xs:boolean" />
+              <xs:element minOccurs="0" name="lastUsedOnTimesheetByResource" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="parmIsFavorite" type="xs:boolean" />
+              <xs:element minOccurs="0" name="parmProjCustName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjId" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjModifiedDateTime" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjStatus" type="tns:ProjStatus" />
+              <xs:element minOccurs="0" name="parmTimesheetLineModifiedDateTime" type="xs:dateTime" />
+              <xs:element minOccurs="0" name="projType" type="tns:ProjType" />
+              <xs:element minOccurs="0" name="projectCustAccount" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetProject" nillable="true" type="tns:TSTimesheetProject" />
+      <xs:complexType name="ArrayOfTSTimesheetActivity">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetActivity" nillable="true" type="tns:TSTimesheetActivity" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetActivity" nillable="true" type="tns:ArrayOfTSTimesheetActivity" />
+      <xs:complexType name="TSTimesheetActivity">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q18="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q18:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="defaultHourCategory" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="defaultHourCategoryName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parentActivityNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjActivityNumber" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="parmProjActivityPurpose" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetActivity" nillable="true" type="tns:TSTimesheetActivity" />
+      <xs:simpleType name="ProjStatus">
+        <xs:restriction base="xs:string" />
+      </xs:simpleType>
+      <xs:element name="ProjStatus" nillable="true" type="tns:ProjStatus" />
+      <xs:simpleType name="ProjType">
+        <xs:restriction base="xs:string" />
+      </xs:simpleType>
+      <xs:element name="ProjType" nillable="true" type="tns:ProjType" />
+      <xs:complexType name="ArrayOfTSTimesheetSalesItemTaxGroup">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetSalesItemTaxGroup" nillable="true" type="tns:TSTimesheetSalesItemTaxGroup" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetSalesItemTaxGroup" nillable="true" type="tns:ArrayOfTSTimesheetSalesItemTaxGroup" />
+      <xs:complexType name="TSTimesheetSalesItemTaxGroup">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q19="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q19:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="salesItemTaxGroup" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetSalesItemTaxGroup" nillable="true" type="tns:TSTimesheetSalesItemTaxGroup" />
+      <xs:complexType name="ArrayOfTSTimesheetSalesTaxGroup">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetSalesTaxGroup" nillable="true" type="tns:TSTimesheetSalesTaxGroup" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetSalesTaxGroup" nillable="true" type="tns:ArrayOfTSTimesheetSalesTaxGroup" />
+      <xs:complexType name="TSTimesheetSalesTaxGroup">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q20="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q20:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="salesTaxGroup" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetSalesTaxGroup" nillable="true" type="tns:TSTimesheetSalesTaxGroup" />
+      <xs:complexType name="TSTimesheetProjectList">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q21="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q21:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmProjectList" nillable="true" type="tns:ArrayOfTSTimesheetProject" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetProjectList" nillable="true" type="tns:TSTimesheetProjectList" />
+      <xs:complexType name="TSServiceLabels">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q22="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q22:XppObjectBase">
+            <xs:sequence>
+              <xs:element xmlns:q23="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="labelMap" nillable="true" type="q23:ArrayOfKeyValueOfstringstring" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSServiceLabels" nillable="true" type="tns:TSServiceLabels" />
+      <xs:complexType name="TSTimesheetDetailsList">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q24="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q24:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmDetailsList" nillable="true" type="tns:ArrayOfTsTimesheetDetails" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetDetailsList" nillable="true" type="tns:TSTimesheetDetailsList" />
+      <xs:complexType name="TSTimesheetWorkflowResult">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q25="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q25:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmWorkflowResult" type="xs:boolean" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetWorkflowResult" nillable="true" type="tns:TSTimesheetWorkflowResult" />
+      <xs:complexType name="TSTimesheetUserList">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q26="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q26:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmUserList" nillable="true" type="tns:ArrayOfTSTimesheetUser" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetUserList" nillable="true" type="tns:TSTimesheetUserList" />
+      <xs:complexType name="ArrayOfTSTimesheetUser">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="TSTimesheetUser" nillable="true" type="tns:TSTimesheetUser" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="ArrayOfTSTimesheetUser" nillable="true" type="tns:ArrayOfTSTimesheetUser" />
+      <xs:complexType name="TSTimesheetUser">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q27="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" base="q27:XppObjectBase">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="__k_parmName" nillable="true" type="xs:string" />
+              <xs:element minOccurs="0" name="__k_parmUserId" nillable="true" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="TSTimesheetUser" nillable="true" type="tns:TSTimesheetUser" />
+    </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.Ax.Xpp" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.AX.KernelInterop" />
+      <xs:complexType name="XppObjectBase">
+        <xs:complexContent mixed="false">
+          <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.AX.KernelInterop" base="q1:ProxyBase">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:element name="XppObjectBase" nillable="true" type="tns:XppObjectBase" />
+      <xs:simpleType name="Types">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="String" />
+          <xs:enumeration value="Integer" />
+          <xs:enumeration value="Real" />
+          <xs:enumeration value="Date" />
+          <xs:enumeration value="Enum" />
+          <xs:enumeration value="RString" />
+          <xs:enumeration value="UtcDateTime" />
+          <xs:enumeration value="Container" />
+          <xs:enumeration value="VarString" />
+          <xs:enumeration value="Record" />
+          <xs:enumeration value="Class" />
+          <xs:enumeration value="UserType" />
+          <xs:enumeration value="AnyType" />
+          <xs:enumeration value="BLOB" />
+          <xs:enumeration value="Void" />
+          <xs:enumeration value="Guid" />
+          <xs:enumeration value="Int64" />
+          <xs:enumeration value="Time" />
+          <xs:enumeration value="VarArg" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="Types" nillable="true" type="tns:Types" />
+      <xs:simpleType name="NoYes">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="No" />
+          <xs:enumeration value="Yes" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="NoYes" nillable="true" type="tns:NoYes" />
+    </xs:schema>
+    <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.AX.KernelInterop" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Microsoft.Dynamics.AX.KernelInterop" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:complexType name="ProxyBase">
+        <xs:sequence />
+      </xs:complexType>
+      <xs:element name="ProxyBase" nillable="true" type="tns:ProxyBase" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getTimesheetSettingsForCurrentUser">
+    <wsdl:part name="parameters" element="tns:getTimesheetSettingsForCurrentUser" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSettingsForCurrentUser_Headers">
+    <wsdl:part xmlns:q1="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q1:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSettingsForCurrentUserResponse">
+    <wsdl:part name="parameters" element="tns:getTimesheetSettingsForCurrentUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSettingsForCurrentUserResponse_Headers">
+    <wsdl:part xmlns:q2="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q2:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getTimesheetSettingsForCurrentUser_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q3:Fault" />
+  </wsdl:message>
+  <wsdl:message name="createNewTimesheet">
+    <wsdl:part name="parameters" element="tns:createNewTimesheet" />
+  </wsdl:message>
+  <wsdl:message name="createNewTimesheet_Headers">
+    <wsdl:part xmlns:q4="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q4:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="createNewTimesheetResponse">
+    <wsdl:part name="parameters" element="tns:createNewTimesheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="createNewTimesheetResponse_Headers">
+    <wsdl:part xmlns:q5="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q5:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_createNewTimesheet_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q6:Fault" />
+  </wsdl:message>
+  <wsdl:message name="findOrCreateTimesheet">
+    <wsdl:part name="parameters" element="tns:findOrCreateTimesheet" />
+  </wsdl:message>
+  <wsdl:message name="findOrCreateTimesheet_Headers">
+    <wsdl:part xmlns:q7="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q7:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="findOrCreateTimesheetResponse">
+    <wsdl:part name="parameters" element="tns:findOrCreateTimesheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="findOrCreateTimesheetResponse_Headers">
+    <wsdl:part xmlns:q8="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q8:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_findOrCreateTimesheet_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q9:Fault" />
+  </wsdl:message>
+  <wsdl:message name="createOrUpdateTimesheetLine">
+    <wsdl:part name="parameters" element="tns:createOrUpdateTimesheetLine" />
+  </wsdl:message>
+  <wsdl:message name="createOrUpdateTimesheetLine_Headers">
+    <wsdl:part xmlns:q10="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q10:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="createOrUpdateTimesheetLineResponse">
+    <wsdl:part name="parameters" element="tns:createOrUpdateTimesheetLineResponse" />
+  </wsdl:message>
+  <wsdl:message name="createOrUpdateTimesheetLineResponse_Headers">
+    <wsdl:part xmlns:q11="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q11:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_createOrUpdateTimesheetLine_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q12:Fault" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheetLine">
+    <wsdl:part name="parameters" element="tns:deleteTimesheetLine" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheetLine_Headers">
+    <wsdl:part xmlns:q13="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q13:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheetLineResponse">
+    <wsdl:part name="parameters" element="tns:deleteTimesheetLineResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheetLineResponse_Headers">
+    <wsdl:part xmlns:q14="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q14:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_deleteTimesheetLine_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q15="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q15:Fault" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheets">
+    <wsdl:part name="parameters" element="tns:deleteTimesheets" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheets_Headers">
+    <wsdl:part xmlns:q16="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q16:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheetsResponse">
+    <wsdl:part name="parameters" element="tns:deleteTimesheetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteTimesheetsResponse_Headers">
+    <wsdl:part xmlns:q17="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q17:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_deleteTimesheets_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q18="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q18:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsByNumber">
+    <wsdl:part name="parameters" element="tns:getTimesheetDetailsByNumber" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsByNumber_Headers">
+    <wsdl:part xmlns:q19="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q19:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsByNumberResponse">
+    <wsdl:part name="parameters" element="tns:getTimesheetDetailsByNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsByNumberResponse_Headers">
+    <wsdl:part xmlns:q20="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q20:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getTimesheetDetailsByNumber_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q21="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q21:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSummary">
+    <wsdl:part name="parameters" element="tns:getTimesheetSummary" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSummary_Headers">
+    <wsdl:part xmlns:q22="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q22:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSummaryResponse">
+    <wsdl:part name="parameters" element="tns:getTimesheetSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetSummaryResponse_Headers">
+    <wsdl:part xmlns:q23="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q23:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getTimesheetSummary_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q24="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q24:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getCompletedTimesheets">
+    <wsdl:part name="parameters" element="tns:getCompletedTimesheets" />
+  </wsdl:message>
+  <wsdl:message name="getCompletedTimesheets_Headers">
+    <wsdl:part xmlns:q25="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q25:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getCompletedTimesheetsResponse">
+    <wsdl:part name="parameters" element="tns:getCompletedTimesheetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getCompletedTimesheetsResponse_Headers">
+    <wsdl:part xmlns:q26="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q26:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getCompletedTimesheets_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q27="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q27:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getLegalEntityReferenceInformation">
+    <wsdl:part name="parameters" element="tns:getLegalEntityReferenceInformation" />
+  </wsdl:message>
+  <wsdl:message name="getLegalEntityReferenceInformation_Headers">
+    <wsdl:part xmlns:q28="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q28:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getLegalEntityReferenceInformationResponse">
+    <wsdl:part name="parameters" element="tns:getLegalEntityReferenceInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="getLegalEntityReferenceInformationResponse_Headers">
+    <wsdl:part xmlns:q29="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q29:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getLegalEntityReferenceInformation_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q30="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q30:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getRecentAndAssignedProjects">
+    <wsdl:part name="parameters" element="tns:getRecentAndAssignedProjects" />
+  </wsdl:message>
+  <wsdl:message name="getRecentAndAssignedProjects_Headers">
+    <wsdl:part xmlns:q31="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q31:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getRecentAndAssignedProjectsResponse">
+    <wsdl:part name="parameters" element="tns:getRecentAndAssignedProjectsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getRecentAndAssignedProjectsResponse_Headers">
+    <wsdl:part xmlns:q32="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q32:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getRecentAndAssignedProjects_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q33="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q33:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsSearch">
+    <wsdl:part name="parameters" element="tns:getProjectDetailsSearch" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsSearch_Headers">
+    <wsdl:part xmlns:q34="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q34:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsSearchResponse">
+    <wsdl:part name="parameters" element="tns:getProjectDetailsSearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsSearchResponse_Headers">
+    <wsdl:part xmlns:q35="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q35:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getProjectDetailsSearch_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q36="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q36:Fault" />
+  </wsdl:message>
+  <wsdl:message name="submitTimesheet">
+    <wsdl:part name="parameters" element="tns:submitTimesheet" />
+  </wsdl:message>
+  <wsdl:message name="submitTimesheet_Headers">
+    <wsdl:part xmlns:q37="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q37:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="submitTimesheetResponse">
+    <wsdl:part name="parameters" element="tns:submitTimesheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="submitTimesheetResponse_Headers">
+    <wsdl:part xmlns:q38="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q38:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_submitTimesheet_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q39="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q39:Fault" />
+  </wsdl:message>
+  <wsdl:message name="recallTimesheet">
+    <wsdl:part name="parameters" element="tns:recallTimesheet" />
+  </wsdl:message>
+  <wsdl:message name="recallTimesheet_Headers">
+    <wsdl:part xmlns:q40="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q40:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="recallTimesheetResponse">
+    <wsdl:part name="parameters" element="tns:recallTimesheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="recallTimesheetResponse_Headers">
+    <wsdl:part xmlns:q41="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q41:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_recallTimesheet_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q42="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q42:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getLabelTranslations">
+    <wsdl:part name="parameters" element="tns:getLabelTranslations" />
+  </wsdl:message>
+  <wsdl:message name="getLabelTranslations_Headers">
+    <wsdl:part xmlns:q43="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q43:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getLabelTranslationsResponse">
+    <wsdl:part name="parameters" element="tns:getLabelTranslationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getLabelTranslationsResponse_Headers">
+    <wsdl:part xmlns:q44="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q44:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getLabelTranslations_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q45="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q45:Fault" />
+  </wsdl:message>
+  <wsdl:message name="saveTimesheetLinesAsFavorite">
+    <wsdl:part name="parameters" element="tns:saveTimesheetLinesAsFavorite" />
+  </wsdl:message>
+  <wsdl:message name="saveTimesheetLinesAsFavorite_Headers">
+    <wsdl:part xmlns:q46="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q46:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="saveTimesheetLinesAsFavoriteResponse">
+    <wsdl:part name="parameters" element="tns:saveTimesheetLinesAsFavoriteResponse" />
+  </wsdl:message>
+  <wsdl:message name="saveTimesheetLinesAsFavoriteResponse_Headers">
+    <wsdl:part xmlns:q47="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q47:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_saveTimesheetLinesAsFavorite_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q48="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q48:Fault" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromFavorites">
+    <wsdl:part name="parameters" element="tns:copyLinesFromFavorites" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromFavorites_Headers">
+    <wsdl:part xmlns:q49="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q49:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromFavoritesResponse">
+    <wsdl:part name="parameters" element="tns:copyLinesFromFavoritesResponse" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromFavoritesResponse_Headers">
+    <wsdl:part xmlns:q50="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q50:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_copyLinesFromFavorites_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q51="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q51:Fault" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromAssignments">
+    <wsdl:part name="parameters" element="tns:copyLinesFromAssignments" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromAssignments_Headers">
+    <wsdl:part xmlns:q52="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q52:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromAssignmentsResponse">
+    <wsdl:part name="parameters" element="tns:copyLinesFromAssignmentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromAssignmentsResponse_Headers">
+    <wsdl:part xmlns:q53="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q53:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_copyLinesFromAssignments_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q54="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q54:Fault" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromTimesheet">
+    <wsdl:part name="parameters" element="tns:copyLinesFromTimesheet" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromTimesheet_Headers">
+    <wsdl:part xmlns:q55="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q55:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromTimesheetResponse">
+    <wsdl:part name="parameters" element="tns:copyLinesFromTimesheetResponse" />
+  </wsdl:message>
+  <wsdl:message name="copyLinesFromTimesheetResponse_Headers">
+    <wsdl:part xmlns:q56="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q56:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_copyLinesFromTimesheet_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q57="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q57:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsByProjId">
+    <wsdl:part name="parameters" element="tns:getProjectDetailsByProjId" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsByProjId_Headers">
+    <wsdl:part xmlns:q58="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q58:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsByProjIdResponse">
+    <wsdl:part name="parameters" element="tns:getProjectDetailsByProjIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProjectDetailsByProjIdResponse_Headers">
+    <wsdl:part xmlns:q59="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q59:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getProjectDetailsByProjId_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q60="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q60:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getServerVersion">
+    <wsdl:part name="parameters" element="tns:getServerVersion" />
+  </wsdl:message>
+  <wsdl:message name="getServerVersion_Headers">
+    <wsdl:part xmlns:q61="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q61:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getServerVersionResponse">
+    <wsdl:part name="parameters" element="tns:getServerVersionResponse" />
+  </wsdl:message>
+  <wsdl:message name="getServerVersionResponse_Headers">
+    <wsdl:part xmlns:q62="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q62:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetSubmissionService_getServerVersion_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q63="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q63:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetsForMyApproval">
+    <wsdl:part name="parameters" element="tns:getTimesheetsForMyApproval" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetsForMyApproval_Headers">
+    <wsdl:part xmlns:q64="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q64:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetsForMyApprovalResponse">
+    <wsdl:part name="parameters" element="tns:getTimesheetsForMyApprovalResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetsForMyApprovalResponse_Headers">
+    <wsdl:part xmlns:q65="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q65:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_getTimesheetsForMyApproval_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q66="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q66:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsForMyApproval">
+    <wsdl:part name="parameters" element="tns:getTimesheetDetailsForMyApproval" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsForMyApproval_Headers">
+    <wsdl:part xmlns:q67="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q67:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsForMyApprovalResponse">
+    <wsdl:part name="parameters" element="tns:getTimesheetDetailsForMyApprovalResponse" />
+  </wsdl:message>
+  <wsdl:message name="getTimesheetDetailsForMyApprovalResponse_Headers">
+    <wsdl:part xmlns:q68="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q68:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_getTimesheetDetailsForMyApproval_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q69="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q69:Fault" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheets">
+    <wsdl:part name="parameters" element="tns:approveTimesheets" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheets_Headers">
+    <wsdl:part xmlns:q70="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q70:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheetsResponse">
+    <wsdl:part name="parameters" element="tns:approveTimesheetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheetsResponse_Headers">
+    <wsdl:part xmlns:q71="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q71:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_approveTimesheets_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q72="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q72:Fault" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheetLines">
+    <wsdl:part name="parameters" element="tns:approveTimesheetLines" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheetLines_Headers">
+    <wsdl:part xmlns:q73="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q73:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheetLinesResponse">
+    <wsdl:part name="parameters" element="tns:approveTimesheetLinesResponse" />
+  </wsdl:message>
+  <wsdl:message name="approveTimesheetLinesResponse_Headers">
+    <wsdl:part xmlns:q74="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q74:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_approveTimesheetLines_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q75="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q75:Fault" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheets">
+    <wsdl:part name="parameters" element="tns:rejectTimesheets" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheets_Headers">
+    <wsdl:part xmlns:q76="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q76:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheetsResponse">
+    <wsdl:part name="parameters" element="tns:rejectTimesheetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheetsResponse_Headers">
+    <wsdl:part xmlns:q77="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q77:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_rejectTimesheets_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q78="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q78:Fault" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheetLines">
+    <wsdl:part name="parameters" element="tns:rejectTimesheetLines" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheetLines_Headers">
+    <wsdl:part xmlns:q79="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q79:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheetLinesResponse">
+    <wsdl:part name="parameters" element="tns:rejectTimesheetLinesResponse" />
+  </wsdl:message>
+  <wsdl:message name="rejectTimesheetLinesResponse_Headers">
+    <wsdl:part xmlns:q80="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q80:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_rejectTimesheetLines_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q81="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q81:Fault" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheets">
+    <wsdl:part name="parameters" element="tns:delegateTimesheets" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheets_Headers">
+    <wsdl:part xmlns:q82="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q82:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheetsResponse">
+    <wsdl:part name="parameters" element="tns:delegateTimesheetsResponse" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheetsResponse_Headers">
+    <wsdl:part xmlns:q83="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q83:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_delegateTimesheets_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q84="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q84:Fault" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheetLines">
+    <wsdl:part name="parameters" element="tns:delegateTimesheetLines" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheetLines_Headers">
+    <wsdl:part xmlns:q85="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q85:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheetLinesResponse">
+    <wsdl:part name="parameters" element="tns:delegateTimesheetLinesResponse" />
+  </wsdl:message>
+  <wsdl:message name="delegateTimesheetLinesResponse_Headers">
+    <wsdl:part xmlns:q86="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q86:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_delegateTimesheetLines_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q87="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q87:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForApproval">
+    <wsdl:part name="parameters" element="tns:getDelegatesForApproval" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForApproval_Headers">
+    <wsdl:part xmlns:q88="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q88:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForApprovalResponse">
+    <wsdl:part name="parameters" element="tns:getDelegatesForApprovalResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForApprovalResponse_Headers">
+    <wsdl:part xmlns:q89="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q89:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_getDelegatesForApproval_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q90="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q90:Fault" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForLineApproval">
+    <wsdl:part name="parameters" element="tns:getDelegatesForLineApproval" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForLineApproval_Headers">
+    <wsdl:part xmlns:q91="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="callContext" element="q91:CallContext" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForLineApprovalResponse">
+    <wsdl:part name="parameters" element="tns:getDelegatesForLineApprovalResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDelegatesForLineApprovalResponse_Headers">
+    <wsdl:part xmlns:q92="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="infolog" element="q92:Infolog" />
+  </wsdl:message>
+  <wsdl:message name="TSTimesheetApprovalService_getDelegatesForLineApproval_SoapServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q93="http://schemas.microsoft.com/dynamics/2013/01/datacontracts" name="detail" element="q93:Fault" />
+  </wsdl:message>
+  <wsdl:portType name="TSTimesheetSubmissionService">
+    <wsdl:operation name="getTimesheetSettingsForCurrentUser">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetSettingsForCurrentUser" name="getTimesheetSettingsForCurrentUser" message="tns:getTimesheetSettingsForCurrentUser" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetSettingsForCurrentUserResponse" name="getTimesheetSettingsForCurrentUserResponse" message="tns:getTimesheetSettingsForCurrentUserResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getTimesheetSettingsForCurrentUser_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="createNewTimesheet">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/createNewTimesheet" name="createNewTimesheet" message="tns:createNewTimesheet" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/createNewTimesheetResponse" name="createNewTimesheetResponse" message="tns:createNewTimesheetResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_createNewTimesheet_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="findOrCreateTimesheet">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/findOrCreateTimesheet" name="findOrCreateTimesheet" message="tns:findOrCreateTimesheet" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/findOrCreateTimesheetResponse" name="findOrCreateTimesheetResponse" message="tns:findOrCreateTimesheetResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_findOrCreateTimesheet_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="createOrUpdateTimesheetLine">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/createOrUpdateTimesheetLine" name="createOrUpdateTimesheetLine" message="tns:createOrUpdateTimesheetLine" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/createOrUpdateTimesheetLineResponse" name="createOrUpdateTimesheetLineResponse" message="tns:createOrUpdateTimesheetLineResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_createOrUpdateTimesheetLine_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteTimesheetLine">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/deleteTimesheetLine" name="deleteTimesheetLine" message="tns:deleteTimesheetLine" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/deleteTimesheetLineResponse" name="deleteTimesheetLineResponse" message="tns:deleteTimesheetLineResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_deleteTimesheetLine_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteTimesheets">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/deleteTimesheets" name="deleteTimesheets" message="tns:deleteTimesheets" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/deleteTimesheetsResponse" name="deleteTimesheetsResponse" message="tns:deleteTimesheetsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_deleteTimesheets_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTimesheetDetailsByNumber">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetDetailsByNumber" name="getTimesheetDetailsByNumber" message="tns:getTimesheetDetailsByNumber" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetDetailsByNumberResponse" name="getTimesheetDetailsByNumberResponse" message="tns:getTimesheetDetailsByNumberResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getTimesheetDetailsByNumber_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTimesheetSummary">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetSummary" name="getTimesheetSummary" message="tns:getTimesheetSummary" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetSummaryResponse" name="getTimesheetSummaryResponse" message="tns:getTimesheetSummaryResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getTimesheetSummary_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getCompletedTimesheets">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getCompletedTimesheets" name="getCompletedTimesheets" message="tns:getCompletedTimesheets" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getCompletedTimesheetsResponse" name="getCompletedTimesheetsResponse" message="tns:getCompletedTimesheetsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getCompletedTimesheets_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getLegalEntityReferenceInformation">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getLegalEntityReferenceInformation" name="getLegalEntityReferenceInformation" message="tns:getLegalEntityReferenceInformation" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getLegalEntityReferenceInformationResponse" name="getLegalEntityReferenceInformationResponse" message="tns:getLegalEntityReferenceInformationResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getLegalEntityReferenceInformation_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getRecentAndAssignedProjects">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getRecentAndAssignedProjects" name="getRecentAndAssignedProjects" message="tns:getRecentAndAssignedProjects" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getRecentAndAssignedProjectsResponse" name="getRecentAndAssignedProjectsResponse" message="tns:getRecentAndAssignedProjectsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getRecentAndAssignedProjects_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getProjectDetailsSearch">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getProjectDetailsSearch" name="getProjectDetailsSearch" message="tns:getProjectDetailsSearch" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getProjectDetailsSearchResponse" name="getProjectDetailsSearchResponse" message="tns:getProjectDetailsSearchResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getProjectDetailsSearch_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="submitTimesheet">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/submitTimesheet" name="submitTimesheet" message="tns:submitTimesheet" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/submitTimesheetResponse" name="submitTimesheetResponse" message="tns:submitTimesheetResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_submitTimesheet_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="recallTimesheet">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/recallTimesheet" name="recallTimesheet" message="tns:recallTimesheet" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/recallTimesheetResponse" name="recallTimesheetResponse" message="tns:recallTimesheetResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_recallTimesheet_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getLabelTranslations">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getLabelTranslations" name="getLabelTranslations" message="tns:getLabelTranslations" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getLabelTranslationsResponse" name="getLabelTranslationsResponse" message="tns:getLabelTranslationsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getLabelTranslations_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="saveTimesheetLinesAsFavorite">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/saveTimesheetLinesAsFavorite" name="saveTimesheetLinesAsFavorite" message="tns:saveTimesheetLinesAsFavorite" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/saveTimesheetLinesAsFavoriteResponse" name="saveTimesheetLinesAsFavoriteResponse" message="tns:saveTimesheetLinesAsFavoriteResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_saveTimesheetLinesAsFavorite_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="copyLinesFromFavorites">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromFavorites" name="copyLinesFromFavorites" message="tns:copyLinesFromFavorites" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromFavoritesResponse" name="copyLinesFromFavoritesResponse" message="tns:copyLinesFromFavoritesResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_copyLinesFromFavorites_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="copyLinesFromAssignments">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromAssignments" name="copyLinesFromAssignments" message="tns:copyLinesFromAssignments" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromAssignmentsResponse" name="copyLinesFromAssignmentsResponse" message="tns:copyLinesFromAssignmentsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_copyLinesFromAssignments_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="copyLinesFromTimesheet">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromTimesheet" name="copyLinesFromTimesheet" message="tns:copyLinesFromTimesheet" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromTimesheetResponse" name="copyLinesFromTimesheetResponse" message="tns:copyLinesFromTimesheetResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_copyLinesFromTimesheet_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getProjectDetailsByProjId">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getProjectDetailsByProjId" name="getProjectDetailsByProjId" message="tns:getProjectDetailsByProjId" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getProjectDetailsByProjIdResponse" name="getProjectDetailsByProjIdResponse" message="tns:getProjectDetailsByProjIdResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getProjectDetailsByProjId_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getServerVersion">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getServerVersion" name="getServerVersion" message="tns:getServerVersion" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/getServerVersionResponse" name="getServerVersionResponse" message="tns:getServerVersionResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetSubmissionService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetSubmissionService_getServerVersion_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="TSTimesheetApprovalService">
+    <wsdl:operation name="getTimesheetsForMyApproval">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getTimesheetsForMyApproval" name="getTimesheetsForMyApproval" message="tns:getTimesheetsForMyApproval" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getTimesheetsForMyApprovalResponse" name="getTimesheetsForMyApprovalResponse" message="tns:getTimesheetsForMyApprovalResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_getTimesheetsForMyApproval_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getTimesheetDetailsForMyApproval">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getTimesheetDetailsForMyApproval" name="getTimesheetDetailsForMyApproval" message="tns:getTimesheetDetailsForMyApproval" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getTimesheetDetailsForMyApprovalResponse" name="getTimesheetDetailsForMyApprovalResponse" message="tns:getTimesheetDetailsForMyApprovalResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_getTimesheetDetailsForMyApproval_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="approveTimesheets">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/approveTimesheets" name="approveTimesheets" message="tns:approveTimesheets" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/approveTimesheetsResponse" name="approveTimesheetsResponse" message="tns:approveTimesheetsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_approveTimesheets_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="approveTimesheetLines">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/approveTimesheetLines" name="approveTimesheetLines" message="tns:approveTimesheetLines" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/approveTimesheetLinesResponse" name="approveTimesheetLinesResponse" message="tns:approveTimesheetLinesResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_approveTimesheetLines_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="rejectTimesheets">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/rejectTimesheets" name="rejectTimesheets" message="tns:rejectTimesheets" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/rejectTimesheetsResponse" name="rejectTimesheetsResponse" message="tns:rejectTimesheetsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_rejectTimesheets_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="rejectTimesheetLines">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/rejectTimesheetLines" name="rejectTimesheetLines" message="tns:rejectTimesheetLines" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/rejectTimesheetLinesResponse" name="rejectTimesheetLinesResponse" message="tns:rejectTimesheetLinesResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_rejectTimesheetLines_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="delegateTimesheets">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/delegateTimesheets" name="delegateTimesheets" message="tns:delegateTimesheets" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/delegateTimesheetsResponse" name="delegateTimesheetsResponse" message="tns:delegateTimesheetsResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_delegateTimesheets_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="delegateTimesheetLines">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/delegateTimesheetLines" name="delegateTimesheetLines" message="tns:delegateTimesheetLines" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/delegateTimesheetLinesResponse" name="delegateTimesheetLinesResponse" message="tns:delegateTimesheetLinesResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_delegateTimesheetLines_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getDelegatesForApproval">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getDelegatesForApproval" name="getDelegatesForApproval" message="tns:getDelegatesForApproval" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getDelegatesForApprovalResponse" name="getDelegatesForApprovalResponse" message="tns:getDelegatesForApprovalResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_getDelegatesForApproval_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="getDelegatesForLineApproval">
+      <wsdl:input wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getDelegatesForLineApproval" name="getDelegatesForLineApproval" message="tns:getDelegatesForLineApproval" />
+      <wsdl:output wsam:Action="http://tempuri.org/TSTimesheetApprovalService/getDelegatesForLineApprovalResponse" name="getDelegatesForLineApprovalResponse" message="tns:getDelegatesForLineApprovalResponse" />
+      <wsdl:fault wsam:Action="http://tempuri.org/TSTimesheetApprovalService/Fault" name="SoapServiceFaultFault" message="tns:TSTimesheetApprovalService_getDelegatesForLineApproval_SoapServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_TSTimesheetSubmissionService" type="tns:TSTimesheetSubmissionService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_TSTimesheetSubmissionService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getTimesheetSettingsForCurrentUser">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetSettingsForCurrentUser" style="document" />
+      <wsdl:input name="getTimesheetSettingsForCurrentUser">
+        <soap:header message="tns:getTimesheetSettingsForCurrentUser_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTimesheetSettingsForCurrentUserResponse">
+        <soap:header message="tns:getTimesheetSettingsForCurrentUserResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createNewTimesheet">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/createNewTimesheet" style="document" />
+      <wsdl:input name="createNewTimesheet">
+        <soap:header message="tns:createNewTimesheet_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createNewTimesheetResponse">
+        <soap:header message="tns:createNewTimesheetResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findOrCreateTimesheet">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/findOrCreateTimesheet" style="document" />
+      <wsdl:input name="findOrCreateTimesheet">
+        <soap:header message="tns:findOrCreateTimesheet_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="findOrCreateTimesheetResponse">
+        <soap:header message="tns:findOrCreateTimesheetResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createOrUpdateTimesheetLine">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/createOrUpdateTimesheetLine" style="document" />
+      <wsdl:input name="createOrUpdateTimesheetLine">
+        <soap:header message="tns:createOrUpdateTimesheetLine_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="createOrUpdateTimesheetLineResponse">
+        <soap:header message="tns:createOrUpdateTimesheetLineResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteTimesheetLine">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/deleteTimesheetLine" style="document" />
+      <wsdl:input name="deleteTimesheetLine">
+        <soap:header message="tns:deleteTimesheetLine_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="deleteTimesheetLineResponse">
+        <soap:header message="tns:deleteTimesheetLineResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteTimesheets">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/deleteTimesheets" style="document" />
+      <wsdl:input name="deleteTimesheets">
+        <soap:header message="tns:deleteTimesheets_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="deleteTimesheetsResponse">
+        <soap:header message="tns:deleteTimesheetsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTimesheetDetailsByNumber">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetDetailsByNumber" style="document" />
+      <wsdl:input name="getTimesheetDetailsByNumber">
+        <soap:header message="tns:getTimesheetDetailsByNumber_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTimesheetDetailsByNumberResponse">
+        <soap:header message="tns:getTimesheetDetailsByNumberResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTimesheetSummary">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getTimesheetSummary" style="document" />
+      <wsdl:input name="getTimesheetSummary">
+        <soap:header message="tns:getTimesheetSummary_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTimesheetSummaryResponse">
+        <soap:header message="tns:getTimesheetSummaryResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCompletedTimesheets">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getCompletedTimesheets" style="document" />
+      <wsdl:input name="getCompletedTimesheets">
+        <soap:header message="tns:getCompletedTimesheets_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getCompletedTimesheetsResponse">
+        <soap:header message="tns:getCompletedTimesheetsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLegalEntityReferenceInformation">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getLegalEntityReferenceInformation" style="document" />
+      <wsdl:input name="getLegalEntityReferenceInformation">
+        <soap:header message="tns:getLegalEntityReferenceInformation_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getLegalEntityReferenceInformationResponse">
+        <soap:header message="tns:getLegalEntityReferenceInformationResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getRecentAndAssignedProjects">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getRecentAndAssignedProjects" style="document" />
+      <wsdl:input name="getRecentAndAssignedProjects">
+        <soap:header message="tns:getRecentAndAssignedProjects_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getRecentAndAssignedProjectsResponse">
+        <soap:header message="tns:getRecentAndAssignedProjectsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getProjectDetailsSearch">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getProjectDetailsSearch" style="document" />
+      <wsdl:input name="getProjectDetailsSearch">
+        <soap:header message="tns:getProjectDetailsSearch_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getProjectDetailsSearchResponse">
+        <soap:header message="tns:getProjectDetailsSearchResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="submitTimesheet">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/submitTimesheet" style="document" />
+      <wsdl:input name="submitTimesheet">
+        <soap:header message="tns:submitTimesheet_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="submitTimesheetResponse">
+        <soap:header message="tns:submitTimesheetResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="recallTimesheet">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/recallTimesheet" style="document" />
+      <wsdl:input name="recallTimesheet">
+        <soap:header message="tns:recallTimesheet_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="recallTimesheetResponse">
+        <soap:header message="tns:recallTimesheetResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getLabelTranslations">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getLabelTranslations" style="document" />
+      <wsdl:input name="getLabelTranslations">
+        <soap:header message="tns:getLabelTranslations_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getLabelTranslationsResponse">
+        <soap:header message="tns:getLabelTranslationsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="saveTimesheetLinesAsFavorite">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/saveTimesheetLinesAsFavorite" style="document" />
+      <wsdl:input name="saveTimesheetLinesAsFavorite">
+        <soap:header message="tns:saveTimesheetLinesAsFavorite_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="saveTimesheetLinesAsFavoriteResponse">
+        <soap:header message="tns:saveTimesheetLinesAsFavoriteResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="copyLinesFromFavorites">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromFavorites" style="document" />
+      <wsdl:input name="copyLinesFromFavorites">
+        <soap:header message="tns:copyLinesFromFavorites_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="copyLinesFromFavoritesResponse">
+        <soap:header message="tns:copyLinesFromFavoritesResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="copyLinesFromAssignments">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromAssignments" style="document" />
+      <wsdl:input name="copyLinesFromAssignments">
+        <soap:header message="tns:copyLinesFromAssignments_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="copyLinesFromAssignmentsResponse">
+        <soap:header message="tns:copyLinesFromAssignmentsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="copyLinesFromTimesheet">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/copyLinesFromTimesheet" style="document" />
+      <wsdl:input name="copyLinesFromTimesheet">
+        <soap:header message="tns:copyLinesFromTimesheet_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="copyLinesFromTimesheetResponse">
+        <soap:header message="tns:copyLinesFromTimesheetResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getProjectDetailsByProjId">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getProjectDetailsByProjId" style="document" />
+      <wsdl:input name="getProjectDetailsByProjId">
+        <soap:header message="tns:getProjectDetailsByProjId_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getProjectDetailsByProjIdResponse">
+        <soap:header message="tns:getProjectDetailsByProjIdResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getServerVersion">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetSubmissionService/getServerVersion" style="document" />
+      <wsdl:input name="getServerVersion">
+        <soap:header message="tns:getServerVersion_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getServerVersionResponse">
+        <soap:header message="tns:getServerVersionResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BasicHttpBinding_TSTimesheetApprovalService" type="tns:TSTimesheetApprovalService">
+    <wsp:PolicyReference URI="#BasicHttpBinding_TSTimesheetApprovalService_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getTimesheetsForMyApproval">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/getTimesheetsForMyApproval" style="document" />
+      <wsdl:input name="getTimesheetsForMyApproval">
+        <soap:header message="tns:getTimesheetsForMyApproval_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTimesheetsForMyApprovalResponse">
+        <soap:header message="tns:getTimesheetsForMyApprovalResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTimesheetDetailsForMyApproval">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/getTimesheetDetailsForMyApproval" style="document" />
+      <wsdl:input name="getTimesheetDetailsForMyApproval">
+        <soap:header message="tns:getTimesheetDetailsForMyApproval_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getTimesheetDetailsForMyApprovalResponse">
+        <soap:header message="tns:getTimesheetDetailsForMyApprovalResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="approveTimesheets">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/approveTimesheets" style="document" />
+      <wsdl:input name="approveTimesheets">
+        <soap:header message="tns:approveTimesheets_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="approveTimesheetsResponse">
+        <soap:header message="tns:approveTimesheetsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="approveTimesheetLines">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/approveTimesheetLines" style="document" />
+      <wsdl:input name="approveTimesheetLines">
+        <soap:header message="tns:approveTimesheetLines_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="approveTimesheetLinesResponse">
+        <soap:header message="tns:approveTimesheetLinesResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="rejectTimesheets">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/rejectTimesheets" style="document" />
+      <wsdl:input name="rejectTimesheets">
+        <soap:header message="tns:rejectTimesheets_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="rejectTimesheetsResponse">
+        <soap:header message="tns:rejectTimesheetsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="rejectTimesheetLines">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/rejectTimesheetLines" style="document" />
+      <wsdl:input name="rejectTimesheetLines">
+        <soap:header message="tns:rejectTimesheetLines_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="rejectTimesheetLinesResponse">
+        <soap:header message="tns:rejectTimesheetLinesResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="delegateTimesheets">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/delegateTimesheets" style="document" />
+      <wsdl:input name="delegateTimesheets">
+        <soap:header message="tns:delegateTimesheets_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="delegateTimesheetsResponse">
+        <soap:header message="tns:delegateTimesheetsResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="delegateTimesheetLines">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/delegateTimesheetLines" style="document" />
+      <wsdl:input name="delegateTimesheetLines">
+        <soap:header message="tns:delegateTimesheetLines_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="delegateTimesheetLinesResponse">
+        <soap:header message="tns:delegateTimesheetLinesResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDelegatesForApproval">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/getDelegatesForApproval" style="document" />
+      <wsdl:input name="getDelegatesForApproval">
+        <soap:header message="tns:getDelegatesForApproval_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getDelegatesForApprovalResponse">
+        <soap:header message="tns:getDelegatesForApprovalResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getDelegatesForLineApproval">
+      <soap:operation soapAction="http://tempuri.org/TSTimesheetApprovalService/getDelegatesForLineApproval" style="document" />
+      <wsdl:input name="getDelegatesForLineApproval">
+        <soap:header message="tns:getDelegatesForLineApproval_Headers" part="callContext" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="getDelegatesForLineApprovalResponse">
+        <soap:header message="tns:getDelegatesForLineApprovalResponse_Headers" part="infolog" use="literal" />
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="SoapServiceFaultFault">
+        <soap:fault use="literal" name="SoapServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="TSTimesheetServices">
+    <wsdl:port name="BasicHttpBinding_TSTimesheetSubmissionService" binding="tns:BasicHttpBinding_TSTimesheetSubmissionService">
+      <soap:address location="https://ad-ctp-10-38eb6867baef10230aos.cloudax.dynamics.com/soap/services/TSTimesheetServices" />
+    </wsdl:port>
+    <wsdl:port name="BasicHttpBinding_TSTimesheetApprovalService" binding="tns:BasicHttpBinding_TSTimesheetApprovalService">
+      <soap:address location="https://ad-ctp-10-38eb6867baef10230aos.cloudax.dynamics.com/soap/services/TSTimesheetServices" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
